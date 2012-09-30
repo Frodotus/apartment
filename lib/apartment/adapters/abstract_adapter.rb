@@ -144,7 +144,11 @@ module Apartment
       #
       def import_database_schema
         ActiveRecord::Schema.verbose = false    # do not log schema load output.
-        load_or_abort("#{Rails.root}/db/schema.rb")
+        if File.exists?("#{Rails.root}/db/schema.rb")
+          load_or_abort("#{Rails.root}/db/schema.rb")
+        else
+          `rake db:structure:load`
+        end
       end
 
       #   Return a new config that is multi-tenanted
